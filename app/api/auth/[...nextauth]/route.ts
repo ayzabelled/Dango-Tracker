@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // pages/api/auth/[...nextauth].ts
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -66,7 +67,7 @@ export const authOptions = {
     async session({ session, token }: { session: any; token: any; })  {
       if (session?.user) {
         session.user.id = token.id;
-        session.user.uid = token.id; // Or just use session.user.id
+        session.user.uid = token.id; 
         session.user.email = token.email;
         session.user.name = token.name;
       }

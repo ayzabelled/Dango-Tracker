@@ -4,14 +4,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { useToast } from "@/hooks/use-toast"
 
 const SignupForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const { toast } = useToast()
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,6 +36,7 @@ const SignupForm: React.FC = () => {
         callbackUrl: '/',
       });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message);
       console.error("Error signing up:", err);

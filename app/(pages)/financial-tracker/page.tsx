@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { DataTable } from '@/components/data-table';
 import { trackerColumns } from '@/components/columns';
 import { SessionProvider, useSession } from 'next-auth/react';
