@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // pages/api/auth/[...nextauth].ts
-import NextAuth from "next-auth";
+import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { Pool } from 'pg'; // Or @neondatabase/serverless if using Neon
 import bcrypt from 'bcrypt';
