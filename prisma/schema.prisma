@@ -1,0 +1,46 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // From your .env file
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id    String @id @default(cuid())
+  email String @unique
+  name  String?
+  financialTrackings FinancialTracking[]
+  todoLists         TodoList[]
+  journals          Journal[]
+}
+
+model FinancialTracking {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  amount    Float
+  category  String
+  type      String   // "Cash In" or "Cash Out"
+  date      DateTime
+  time      DateTime
+}
+
+model TodoList {
+    id        String   @id @default(cuid())
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String
+    category  String
+    description String
+    dueDate   DateTime
+}
+
+model Journal {
+    id        String   @id @default(cuid())
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String
+    title     String
+    date      DateTime
+    description String
+}
