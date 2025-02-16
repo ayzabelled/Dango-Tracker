@@ -110,6 +110,7 @@ const FinancialTrackingForm: React.FC = () => {
             setDate('');
             setTime('');
             setSuccessMessage('Entry created successfully!');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             setError(err.message);
             console.error('Error creating record:', err);
