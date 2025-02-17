@@ -75,7 +75,7 @@ const collapsibleItems = [
 export function AppSidebar() {
   return (
     <Sidebar>
-      <Image src="/logo.png" height={200} width={200} alt="Logo" className="flex justify-center pl-16" />
+      <Image src="/logo.png" height={200} width={200} alt="Logo" className="flex justify-center pl-12" />
       <h1 className="text-[#6486DB] flex justify-center text-xl font-bold">🍡 Dango Tracker 🍡</h1>
       <SidebarContent>
         <SidebarGroup>

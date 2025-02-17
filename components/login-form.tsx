@@ -26,7 +26,7 @@ const LoginForm: React.FC = () => {
       if (result?.error) {
         setError(result.error);
       } else {
-        router.push('/dashboard'); // Alternative redirect if signIn doesn't handle it
+        router.push('/'); // Alternative redirect if signIn doesn't handle it
       }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -91,8 +91,8 @@ const LoginForm: React.FC = () => {
           </form>
           <div className="relative hidden bg-muted md:block">
             <img
-              src="/placeholder.svg"
-              alt="Image"
+              src="/logo.png"
+              alt="Logo"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />
           </div>

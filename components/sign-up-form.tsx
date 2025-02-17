@@ -109,9 +109,9 @@ const SignupForm: React.FC = () => {
             </div>
           </form>
           <div className="relative hidden bg-muted md:block">
-            <img
-              src="/placeholder.svg"
-              alt="Image"
+          <img
+              src="/logo.png"
+              alt="Logo"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />
           </div>
