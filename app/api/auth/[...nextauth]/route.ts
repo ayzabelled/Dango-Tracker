@@ -22,7 +22,8 @@ async function comparePasswords(password: string, hash: string) {
   return await bcrypt.compare(password, hash);
 }
 
-export const authOptions: NextAuthOptions = { 
+const authOptions: NextAuthOptions = { 
+
   providers: [
       CredentialsProvider({
       name: "Credentials",
