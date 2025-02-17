@@ -5,15 +5,12 @@ import { Label } from "@/components/ui/label"
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useToast } from "@/hooks/use-toast"
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { toast } = useToast()
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,8 +26,9 @@ const LoginForm: React.FC = () => {
       if (result?.error) {
         setError(result.error);
       } else {
-        router.push('/dashboard'); // Alternative redirect if signIn doesn't handle it
+        router.push('/'); // Alternative redirect if signIn doesn't handle it
       }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message);
       console.error("Error signing in:", err);
@@ -84,7 +82,7 @@ const LoginForm: React.FC = () => {
                 Login
               </Button>
               <div className="text-center text-sm">
-                Don't have an account yet?{" "}
+                Don&apos;t have an account yet?{" "}
                 <a href="/sign-up" className="underline underline-offset-4">
                   Sign-up
                 </a>
@@ -93,8 +91,8 @@ const LoginForm: React.FC = () => {
           </form>
           <div className="relative hidden bg-muted md:block">
             <img
-              src="/placeholder.svg"
-              alt="Image"
+              src="/logo.png"
+              alt="Logo"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />
           </div>

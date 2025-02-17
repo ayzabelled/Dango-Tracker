@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // pages/api/auth/[...nextauth].ts
-import NextAuth from "next-auth";
+import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { Pool } from 'pg'; // Or @neondatabase/serverless if using Neon
 import bcrypt from 'bcrypt';
+import type { NextAuthOptions } from "next-auth"; 
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL }); // Or process.env.NEON_CONNECTION_STRING
 
@@ -20,9 +22,10 @@ async function comparePasswords(password: string, hash: string) {
   return await bcrypt.compare(password, hash);
 }
 
-export const authOptions = {
+const authOptions: NextAuthOptions = { 
+
   providers: [
-    CredentialsProvider({
+      CredentialsProvider({
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
@@ -66,7 +69,7 @@ export const authOptions = {
     async session({ session, token }: { session: any; token: any; })  {
       if (session?.user) {
         session.user.id = token.id;
-        session.user.uid = token.id; // Or just use session.user.id
+        session.user.uid = token.id; 
         session.user.email = token.email;
         session.user.name = token.name;
       }
@@ -82,7 +85,7 @@ export const authOptions = {
     },
   },
   pages: {
-    signIn: '/',
+    signIn: '/login',
   },
 };
 

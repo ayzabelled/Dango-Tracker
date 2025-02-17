@@ -13,7 +13,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useRouter } from "next/navigation";
 import { format } from 'date-fns'; // Import date-fns (install it: npm install date-fns)
 
 
@@ -121,7 +120,6 @@ export const trackerColumns: ColumnDef<FinancialTracker>[] = [
     id: "actions",
     cell: ({ row }) => {
       const item = row.original; // Get the original data object
-      const router = useRouter();
   
       const handleDelete = async () => {
         const confirmDelete = window.confirm("Are you sure you want to delete this entry?");

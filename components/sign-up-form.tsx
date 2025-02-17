@@ -4,14 +4,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { useToast } from "@/hooks/use-toast"
 
 const SignupForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const { toast } = useToast()
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,6 +36,7 @@ const SignupForm: React.FC = () => {
         callbackUrl: '/',
       });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message);
       console.error("Error signing up:", err);
@@ -110,9 +109,9 @@ const SignupForm: React.FC = () => {
             </div>
           </form>
           <div className="relative hidden bg-muted md:block">
-            <img
-              src="/placeholder.svg"
-              alt="Image"
+          <img
+              src="/logo.png"
+              alt="Logo"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />
           </div>

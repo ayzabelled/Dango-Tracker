@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { DataTable } from '@/components/data-table';
 import { trackerColumns } from '@/components/columns';
 import { SessionProvider, useSession } from 'next-auth/react';
@@ -19,7 +18,7 @@ const FinancialTrackerHistory: React.FC = () => {  // Renamed for clarity
     if (status === 'loading') return;
 
     if (status === 'unauthenticated' || !session) {
-      redirect('/');
+      redirect('/login');
       return;
     }
 
@@ -75,8 +74,16 @@ const FinancialTrackerHistory: React.FC = () => {  // Renamed for clarity
     <>
       {loading && (
         <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-          {/* ... (your loading spinner SVG) */}
-        </div>
+        <svg
+            className="animate-spin size-10 text-[#6486DB]"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v2a6 6 0 100 12v2a8 8 0 01-8-8z" />
+        </svg>
+      </div>
       )}
 
       <div className='p-4'>
