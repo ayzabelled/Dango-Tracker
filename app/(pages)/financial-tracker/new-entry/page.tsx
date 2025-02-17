@@ -12,7 +12,7 @@ const FinancialTrackingForm: React.FC = () => {
     const { data: session, status } = useSession();
     const [amount, setAmount] = useState('');
     const [category, setCategory] = useState('');
-    const [type, setType] = useState('cashIn');
+    const [type, setType] = useState('Cash In');
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [error, setError] = useState<string | null>(null);
@@ -50,7 +50,7 @@ const FinancialTrackingForm: React.FC = () => {
         if (status === 'loading') return;
 
         if (status === 'unauthenticated' || !session) {
-            redirect('/'); // Redirect to login page if not authenticated
+            redirect('/login'); // Redirect to login page if not authenticated
             return;
         }
     }, [status, session]);
@@ -137,7 +137,7 @@ const FinancialTrackingForm: React.FC = () => {
             <div className='flex flex-col items-center p-4'>
                 <h1 className='font-bold text-3xl pt-2 '>💸 Financial Tracker 💸</h1>
                 <h2 className='text-xl pt-2 pb-4'>New Entry</h2>
-                <form onSubmit={handleSubmit} className='border border-2 border-gray-500 p-4 rounded-md shadow-md grid grid-cols-3 gap-4 bg-[#F4F4F4] text-[#212121]'>
+                <form onSubmit={handleSubmit} className='border-2 border-gray-500 p-4 rounded-md shadow-md grid grid-cols-3 gap-4 bg-[#F4F4F4] text-[#212121]'>
                     <div className='col-span-3 flex justify-center'>
                         {error && <p style={{ color: 'red' }}>{error}</p>}
                         {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
@@ -145,11 +145,11 @@ const FinancialTrackingForm: React.FC = () => {
                     <div className='flex justify-center col-span-3'>
                         <RadioGroup defaultValue={type} className='flex flex-row justify-center' onValueChange={setType}>
                             <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="Cash In" id="type-cashIn" />
+                                <RadioGroupItem value="Cash In" id="type" />
                                 <Label htmlFor="type-cashIn">Cash In</Label>
                             </div>
                             <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="Cash Out" id="type-cashOut" />
+                                <RadioGroupItem value="Cash Out" id="type" />
                                 <Label htmlFor="type-cashOut">Cash Out</Label>
                             </div>
                         </RadioGroup>
@@ -161,7 +161,7 @@ const FinancialTrackingForm: React.FC = () => {
                             id="amount"
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
-                            className='[&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden border-[#6486DB] border-2 rounded-3xl'
+                            className='[&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden border-[#6486DB] border-2 rounded-3xl text-center font-bold'
                             required
                         />
                     </div>
@@ -173,9 +173,9 @@ const FinancialTrackingForm: React.FC = () => {
                     </div>
                     <div className='col-span-2'>
                         <select id="category" value={category} onChange={(e) => setCategory(e.target.value)}
-                            className='flex h-9 w-full rounded-md border border-[#6486DB] bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#6486DB] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden border-[#6486DB] border-2 rounded-3xl'
+                            className='flex h-9 w-full rounded-md  bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#6486DB] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden border-[#6486DB] border-2 rounded-3xl'
                         >
-                            {type === 'cashIn'
+                            {type === 'Cash In'
                                 ? cashInCategories.map((cat) => (
                                     <option key={cat} value={cat}>
                                         {cat}
