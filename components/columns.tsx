@@ -177,7 +177,7 @@ export const trackerColumns: ColumnDef<FinancialTracker>[] = [
 export type TodoListRequest = {
   id: string;
   userId: string;
-  category: string;
+  categoryname: string;
   description: string;
   dueDate: string;
   done: boolean; 
@@ -192,16 +192,17 @@ export const todolistColumn: ColumnDef<TodoListRequest>[] = [
         row.original.done = checked;
 
         // Make API call to update the received value
-        const response = await fetch(`/api/to-do-list`, {
-          method: "PUT",
+        const response = await fetch(`/api/to-do-list?id=${row.original.id}`, {
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            id: row.original.id,
-            received: checked,
+            done: checked,
           }),
         });
+
+
 
         if (!response.ok) {
           console.error("Failed to update received status");
@@ -223,7 +224,7 @@ export const todolistColumn: ColumnDef<TodoListRequest>[] = [
     },
   },
   {
-    accessorKey: "category",
+    accessorKey: "categoryname",
     header: ({ column }) => {
       return (
         <div className="flex justify-center">
@@ -238,8 +239,8 @@ export const todolistColumn: ColumnDef<TodoListRequest>[] = [
       );
     },
     cell: ({ row }) => {
-      const category: string = row.getValue("category");
-      return <div className="flex justify-center">{category}</div>;
+      const categoryname: string = row.getValue("categoryname");
+      return <div className="flex justify-center">{categoryname}</div>;
     },
   },
   {
@@ -287,6 +288,62 @@ export const todolistColumn: ColumnDef<TodoListRequest>[] = [
       
       const formattedDate = format(date, 'MM-dd-yyyy'); // Format the date
       return <div className="flex justify-center">{formattedDate}</div>;
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const item = row.original; // Get the original data object
+  
+      const handleDelete = async () => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this entry?");
+        if (confirmDelete) {
+          try {
+            const response = await fetch(`/api/to-do-list?id=${item.id}`, { // Send id as query parameter
+              method: "DELETE",
+            });
+  
+            if (!response.ok) {
+              const errorData = await response.json(); // Try to parse error from server
+              const errorMessage = errorData.error || `HTTP error! status: ${response.status}`;
+              console.error("Failed to delete entry:", errorMessage);
+              alert(`Error deleting: ${errorMessage}`); // Alert the user to the error
+            } else {
+              // Refresh the page or update the table data
+              window.location.reload(); // Simplest way: reload the page
+              // Or, if you are managing the data in state:
+              // const newData = data.filter((entry) => entry.id !== item.id);
+              // setData(newData);
+            }
+          } catch (error) {
+            console.error("Error deleting entry:", error);
+            alert("An error occurred during deletion."); // Alert the user
+          }
+        }
+      };
+  
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel className="text-xs font-bold">
+              Actions
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="text-red-500 text-xs hover:text-white hover:bg-red-500"
+              onClick={handleDelete} // Call the handleDelete function
+            >
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
     },
   },
 ];

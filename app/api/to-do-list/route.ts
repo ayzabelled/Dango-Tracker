@@ -47,8 +47,9 @@ export async function GET(request: Request) {
     const result = await pool.query(`
       SELECT "TodoList".*, "Category".name AS categoryName 
       FROM "TodoList" 
-      INNER JOIN "Category" ON "TodoList"."categoryId" = "Category".id
+      INNER JOIN "Category" ON "TodoList".category::uuid = "Category".id
       WHERE "TodoList"."userId" = $1
+
     `, [userId]);
 
     const todos = result.rows;
@@ -89,7 +90,29 @@ export async function PATCH(request: Request) {  // New PATCH request for updati
     }
   }
   
+  export async function DELETE(request: Request) {
+    try {
+      const { searchParams } = new URL(request.url);
+      const id = searchParams.get('id'); // Get the 'id' of the record to delete
   
+      if (!id) {
+        return new Response(JSON.stringify({ error: 'id is required for deletion' }), { status: 400 });
+      }
+  
+      const result = await pool.query('DELETE FROM "TodoList" WHERE id = $1 RETURNING *', [id]);
+  
+      if (result.rowCount === 0) {
+        return new Response(JSON.stringify({ error: 'Record not found' }), { status: 404 }); // 404 if not found
+      }
+  
+      const deletedRecord = result.rows;
+      return new Response(JSON.stringify({ message: 'To-do record deleted', data: deletedRecord }), { status: 200 });
+  
+    } catch (error) {
+      const errorMessage = error instanceof Error? error.message: "An unknown error occurred";
+      console.error('Error deleting to-do record:', errorMessage);
+      return new Response(JSON.stringify({ error: 'Failed to delete to-do record', details: errorMessage }), { status: 500 });
+    }
+  }
   
   export async function OPTIONS() {}
-  

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { DataTable } from "@/components/data-table";
-import { TodoListRequest, trackerColumns } from "@/components/columns";
+import { todolistColumn, TodoListRequest } from "@/components/columns";
 import { SessionProvider, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 
@@ -13,6 +13,27 @@ const TodoList: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const handleCheckboxChange = async (id: string) => {
+    try {
+      const response = await fetch(`/api/to-do-list`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, done: true }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to update received status');
+      }
+      // Refresh the page after successful update
+      window.location.reload();
+
+    } catch (error) {
+      console.error('Error updating received status:', error);
+    }
+  };
+
   useEffect(() => {
     if (status === "loading") return;
 
@@ -20,7 +41,8 @@ const TodoList: React.FC = () => {
       redirect("/login");
       return;
     }
-
+  
+  
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -41,6 +63,8 @@ const TodoList: React.FC = () => {
         }
 
         const result = await response.json();
+        console.log("todolist: ", result)
+
         setData(result.data as TodoListRequest[]);
 
         if (!result.data || !Array.isArray(result.data)) {
@@ -128,9 +152,8 @@ const TodoList: React.FC = () => {
           📜 To-do List
         </h1>{" "}
         {/* Updated title */}
-        <p>Total Amount</p>
-        <div className="pt-4">
-          {data && <DataTable columns={trackerColumns} data={data} />}
+        <div>
+          {data && <DataTable columns={todolistColumn} data={data} onCheckboxChange={handleCheckboxChange}/>}
         </div>
       </div>
     </>
