@@ -62,11 +62,11 @@ const collapsibleItems = [
     items: [
       {
         title: "☑️ To-do List",
-        url: "/to-do",
+        url: "/to-do-list",
       },
       {
         title: "➕ New Entry",
-        url: "/to-do/new-entry",
+        url: "/to-do-list/new-entry",
       },
     ],
   },

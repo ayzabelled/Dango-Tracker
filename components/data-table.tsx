@@ -28,7 +28,7 @@ interface DataTableProps<TData, TValue> {
 }
 
 
-export function DataTable<TData extends { id: string; received: boolean; category: string }, TValue>({
+export function DataTable<TData extends { id: string; category?: string, done?: boolean}, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {

@@ -2,18 +2,37 @@
 
 import { useEffect, useState } from "react";
 import { DataTable } from "@/components/data-table";
-import { trackerColumns } from "@/components/columns";
+import { todolistColumn, TodoListRequest } from "@/components/columns";
 import { SessionProvider, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
-import { FinancialTracker } from "@/components/columns"; // Import your type
 
-const FinancialTrackerHistory: React.FC = () => {
+const TodoList: React.FC = () => {
   // Renamed for clarity
   const { data: session, status } = useSession();
-  const [data, setData] = useState<FinancialTracker[] | null>(null);
+  const [data, setData] = useState<TodoListRequest[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [totalAmount, setTotalAmount] = useState(0);
+
+  const handleCheckboxChange = async (id: string) => {
+    try {
+      const response = await fetch(`/api/to-do-list`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, done: true }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to update received status');
+      }
+      // Refresh the page after successful update
+      window.location.reload();
+
+    } catch (error) {
+      console.error('Error updating received status:', error);
+    }
+  };
 
   useEffect(() => {
     if (status === "loading") return;
@@ -22,7 +41,8 @@ const FinancialTrackerHistory: React.FC = () => {
       redirect("/login");
       return;
     }
-
+  
+  
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -32,7 +52,7 @@ const FinancialTrackerHistory: React.FC = () => {
         }
 
         const response = await fetch(
-          `/api/financial-tracker?userId=${session.user.id}`
+          `/api/to-do-list?userId=${session.user.id}`
         );
 
         if (!response.ok) {
@@ -43,14 +63,15 @@ const FinancialTrackerHistory: React.FC = () => {
         }
 
         const result = await response.json();
-        setData(result.data as FinancialTracker[]);
-        setTotalAmount(result.totalAmount);
+        console.log("todolist: ", result)
+
+        setData(result.data as TodoListRequest[]);
 
         if (!result.data || !Array.isArray(result.data)) {
           throw new Error("Invalid data format received from the API.");
         }
 
-        setData(result.data as FinancialTracker[]);
+        setData(result.data as TodoListRequest[]);
       } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : "An unknown error occurred";
@@ -65,28 +86,30 @@ const FinancialTrackerHistory: React.FC = () => {
   }, [status, session]);
 
   if (status === "loading") {
-    return         <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-    <svg
-      className="animate-spin size-10 text-[#6486DB]"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-    >
-      <circle
-        className="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="4"
-      />
-      <path
-        className="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8v2a6 6 0 100 12v2a8 8 0 01-8-8z"
-      />
-    </svg>
-  </div>;
+    return (
+      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+        <svg
+          className="animate-spin size-10 text-[#6486DB]"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          />
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v2a6 6 0 100 12v2a8 8 0 01-8-8z"
+          />
+        </svg>
+      </div>
+    );
   }
 
   if (status === "unauthenticated" || !session) {
@@ -126,26 +149,22 @@ const FinancialTrackerHistory: React.FC = () => {
 
       <div className="p-4">
         <h1 className="text-2xl font-bold text-white pt-2 pb-4">
-          📜 Financial History
+          📜 To-do List
         </h1>{" "}
         {/* Updated title */}
-        <p>Total Amount</p>
-        <div className="bg-[#f4f4f4] rounded-xl shadow-md flex justify-center text-[#212121] text-xl font-bold h-9">
-          <p className="flex items-center">₱{totalAmount}</p>
-        </div>
-        <div className="pt-4">
-          {data && <DataTable columns={trackerColumns} data={data} />}
+        <div>
+          {data && <DataTable columns={todolistColumn} data={data} onCheckboxChange={handleCheckboxChange}/>}
         </div>
       </div>
     </>
   );
 };
 
-export default function FinancialTrackerHistoryWrapper() {
+export default function TodoListWrapper() {
   // Updated wrapper name
   return (
     <SessionProvider>
-      <FinancialTrackerHistory /> {/* Updated component name */}
+      <TodoList /> {/* Updated component name */}
     </SessionProvider>
   );
 }
