@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import LoadingSpinner from "@/components/loading-indicator";
 
+
 const NewEntryPage: React.FC = () => {
   const { data: session, status } = useSession();
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -187,6 +188,7 @@ const NewEntryPage: React.FC = () => {
           defaultValue={formType}
           onValueChange={setFormType}
           className=" flex justify-center"
+
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="entry" id="entry" />
@@ -201,12 +203,14 @@ const NewEntryPage: React.FC = () => {
             <Label htmlFor="existing">Existing Categories</Label>
           </div>
           
+
         </RadioGroup>
 
         {formType === "entry" ? (
           <form
             onSubmit={handleSubmitEntry}
             className="grid grid-cols-3 gap-4 bg-[#F4F4F4] text-[#212121]"
+
           >
             <div className="col-span-3 flex justify-center">
               {error && <p className="text-red-500">{error}</p>}
@@ -302,6 +306,7 @@ const NewEntryPage: React.FC = () => {
           <form
             onSubmit={handleSubmitCategory}
             className=" grid grid-cols-3 gap-4 text-[#212121]"
+
           >
             <div className="col-span-3 flex justify-center">
               {error && <p className="text-red-500">{error}</p>}
@@ -338,6 +343,7 @@ const NewEntryPage: React.FC = () => {
         )}
       </div>
       </div>
+
     </>
   );
 };

@@ -51,6 +51,7 @@ export async function GET(request: Request) {
       WHERE "TodoList"."userId" = $1
       ORDER BY "TodoList"."dueDate" DESC
 
+
     `, [userId]);
 
     const todos = result.rows;

@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 import { FinancialTracker } from "@/components/columns"; // Import your type
 import LoadingSpinner from "@/components/loading-indicator";
 
+
 const FinancialTrackerHistory: React.FC = () => {
   // Renamed for clarity
   const { data: session, status } = useSession();
@@ -67,6 +68,7 @@ const FinancialTrackerHistory: React.FC = () => {
 
   if (status === "loading") {
     return        <LoadingSpinner/>
+
   }
 
   if (status === "unauthenticated" || !session) {
