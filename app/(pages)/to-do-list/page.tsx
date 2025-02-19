@@ -5,6 +5,7 @@ import { DataTable } from "@/components/data-table";
 import { todolistColumn, TodoListRequest } from "@/components/columns";
 import { SessionProvider, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import LoadingSpinner from "@/components/loading-indicator";
 
 const TodoList: React.FC = () => {
   // Renamed for clarity
@@ -16,33 +17,31 @@ const TodoList: React.FC = () => {
   const handleCheckboxChange = async (id: string) => {
     try {
       const response = await fetch(`/api/to-do-list`, {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ id, done: true }),
       });
-  
+
       if (!response.ok) {
-        throw new Error('Failed to update received status');
+        throw new Error("Failed to update received status");
       }
       // Refresh the page after successful update
       window.location.reload();
-
     } catch (error) {
-      console.error('Error updating received status:', error);
+      console.error("Error updating received status:", error);
     }
   };
 
   useEffect(() => {
-    if (status === "loading") return;
+    if (status === "loading") return ;
 
     if (status === "unauthenticated" || !session) {
       redirect("/login");
       return;
     }
-  
-  
+
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -63,7 +62,7 @@ const TodoList: React.FC = () => {
         }
 
         const result = await response.json();
-        console.log("todolist: ", result)
+        console.log("todolist: ", result);
 
         setData(result.data as TodoListRequest[]);
 
@@ -86,30 +85,7 @@ const TodoList: React.FC = () => {
   }, [status, session]);
 
   if (status === "loading") {
-    return (
-      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-        <svg
-          className="animate-spin size-10 text-[#6486DB]"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"
-          />
-          <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8v2a6 6 0 100 12v2a8 8 0 01-8-8z"
-          />
-        </svg>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (status === "unauthenticated" || !session) {
@@ -122,30 +98,7 @@ const TodoList: React.FC = () => {
 
   return (
     <>
-      {loading && (
-        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-          <svg
-            className="animate-spin size-10 text-[#6486DB]"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8v2a6 6 0 100 12v2a8 8 0 01-8-8z"
-            />
-          </svg>
-        </div>
-      )}
+      {loading && <LoadingSpinner />}
 
       <div className="p-4">
         <h1 className="text-2xl font-bold text-white pt-2 pb-4">
@@ -153,7 +106,13 @@ const TodoList: React.FC = () => {
         </h1>{" "}
         {/* Updated title */}
         <div>
-          {data && <DataTable columns={todolistColumn} data={data} onCheckboxChange={handleCheckboxChange}/>}
+          {data && (
+            <DataTable
+              columns={todolistColumn}
+              data={data}
+              onCheckboxChange={handleCheckboxChange}
+            />
+          )}
         </div>
       </div>
     </>
