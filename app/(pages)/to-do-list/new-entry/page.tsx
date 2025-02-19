@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import LoadingSpinner from "@/components/loading-indicator";
 
 const NewEntryPage: React.FC = () => {
   const { data: session, status } = useSession();
@@ -144,38 +145,48 @@ const NewEntryPage: React.FC = () => {
     }
   };
 
+  const handleDeleteCategory = async (categoryId: string) => {
+    setError(null);
+    setSuccessMessage(null);
+    setLoading(true);
+
+    try {
+      const response = await fetch(`/api/categories?id=${categoryId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to delete category");
+      }
+
+      setCategories(categories.filter((cat) => cat.id !== categoryId));
+      if (selectedCategory === categoryId) {
+        setSelectedCategory(categories.length > 0 ? categories[0].id : "");
+      }
+      setSuccessMessage("Category created successfully!");
+    } catch (err: any) {
+      setError(err.message);
+      console.error("Error deleting category:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
-      {loading && (
-        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-          <svg
-            className="animate-spin size-10 text-blue-500"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8v2a6 6 0 100 12v2a8 8 0 01-8-8z"
-            />
-          </svg>
-        </div>
-      )}
+      {loading && <LoadingSpinner/>
+      }
       <div className="flex flex-col items-center p-4">
-        <h1 className="font-bold text-3xl pt-2 ">➕ To-do List ➕</h1>
+        <h1 className="font-bold text-3xl pt-2 pb-2">➕ To-do List ➕</h1>
+        <div className="border-2 border-[#6486DB] p-4 rounded-md shadow-md bg-[#F4F4F4] text-[#212121]"
+        >
+          
+      
         <RadioGroup
           defaultValue={formType}
           onValueChange={setFormType}
-          className="mb-4"
+          className=" flex justify-center"
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="entry" id="entry" />
@@ -185,12 +196,17 @@ const NewEntryPage: React.FC = () => {
             <RadioGroupItem value="category" id="category" />
             <Label htmlFor="category">Create Category</Label>
           </div>
+          <div className="flex items-center spsce-x-2">
+            <RadioGroupItem value="existing" id="existing" />
+            <Label htmlFor="existing">Existing Categories</Label>
+          </div>
+          
         </RadioGroup>
 
         {formType === "entry" ? (
           <form
             onSubmit={handleSubmitEntry}
-            className="border-2 border-gray-500 p-4 rounded-md shadow-md grid grid-cols-3 gap-4 bg-[#F4F4F4] text-[#212121]"
+            className="grid grid-cols-3 gap-4 bg-[#F4F4F4] text-[#212121]"
           >
             <div className="col-span-3 flex justify-center">
               {error && <p className="text-red-500">{error}</p>}
@@ -256,11 +272,36 @@ const NewEntryPage: React.FC = () => {
               </Button>
             </div>
           </form>
-        ) : (
+        ) :
+        formType === "existing" ? (
+          <div className="mt-4">
+            <h3 className="font-bold text-lg mb-2">Existing Categories</h3>
+            <div className="col-span-3 flex justify-center">
+              {error && <p className="text-red-500">{error}</p>}
+              {successMessage && (
+                <p className="text-green-500">{successMessage}</p>
+              )}
+            </div>
+            <ul>
+              {categories.map((cat) => (
+                <li key={cat.id} className="flex items-center justify-between mb-1">
+                  {cat.name}
+                  <Button
+                    onClick={() => handleDeleteCategory(cat.id)}
+                    className="bg-red-500 text-white rounded-md px-2 py-1"
+                  >
+                    Delete
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+        : (
           // Category Form
           <form
             onSubmit={handleSubmitCategory}
-            className="border-2 border-gray-500 p-4 rounded-md shadow-md grid grid-cols-3 gap-4 bg-[#F4F4F4] text-[#212121]"
+            className=" grid grid-cols-3 gap-4 text-[#212121]"
           >
             <div className="col-span-3 flex justify-center">
               {error && <p className="text-red-500">{error}</p>}
@@ -275,7 +316,7 @@ const NewEntryPage: React.FC = () => {
                 value={newCategoryName}
                 onChange={(e) => setNewCategoryName(e.target.value)}
                 placeholder="New Category Name"
-                className="border-[#6486DB] border-2 rounded-3xl text-center font-bold"
+                className="border-[#6486DB] border-2 rounded-3xl text-center"
                 required
               />
             </div>
@@ -295,6 +336,7 @@ const NewEntryPage: React.FC = () => {
             </div>
           </form>
         )}
+      </div>
       </div>
     </>
   );

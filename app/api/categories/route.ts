@@ -53,5 +53,28 @@ export async function GET(request: Request) {
     }
 }
 
+export async function DELETE(request: Request) {
+    try {
+      const { searchParams } = new URL(request.url);
+      const id = searchParams.get('id'); // Get the category ID
+  
+      if (!id) {
+        return new Response(JSON.stringify({ error: 'id is required for deletion' }), { status: 400 });
+      }
+  
+      const result = await pool.query('DELETE FROM "Category" WHERE id = $1 RETURNING *', [id]);
+  
+      if (result.rowCount === 0) {
+        return new Response(JSON.stringify({ error: 'Category not found' }), { status: 404 });
+      }
+  
+      return new Response(JSON.stringify({ message: 'Category deleted' }), { status: 200 });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+      console.error('Error deleting category:', errorMessage);
+      return new Response(JSON.stringify({ error: 'Failed to delete category', details: errorMessage }), { status: 500 });
+    }
+  }
+  
 
 export async function OPTIONS() {}
