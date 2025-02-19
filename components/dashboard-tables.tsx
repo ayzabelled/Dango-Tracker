@@ -2,7 +2,6 @@
 
 import {
   ColumnDef,
-  InitialTableState,
   SortingState,
   flexRender,
   getCoreRowModel,
@@ -28,13 +27,29 @@ interface DataTableProps<TData, TValue> {
   onCheckboxChange?: (id: string) => Promise<void>;
 }
 
+export type PaginationState = {
+  pageIndex: number;
+  pageSize: number;
+};
 
-export function DahboardTable<TData extends { id: string; received: boolean; category: string }, TValue>({
+export type PaginationTableState = {
+  pagination: PaginationState;
+};
+
+export type PaginationInitialTableState = {
+  pagination?: Partial<PaginationState>;
+};
+
+export function DahboardTable<TData extends { id: string; category?: string, done?: boolean }, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
 
   const [sorting, setSorting] = React.useState<SortingState>([])
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 3, // Initial page size
+  });
   const table = useReactTable({
     data,
     columns,
@@ -43,12 +58,10 @@ export function DahboardTable<TData extends { id: string; received: boolean; cat
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     state: {
-      sorting,
+      sorting, 
+      pagination,
     },
-    initialState: {
-      ...{} as InitialTableState,
-      pageSize: 5,
-  } as InitialTableState,
+    onPaginationChange: setPagination, 
 
   });
 

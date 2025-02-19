@@ -49,8 +49,12 @@ export async function GET(request: Request) {
             return new Response(JSON.stringify({ error: 'userId is required' }), { status: 400 });
         }
 
-        const result = await pool.query('SELECT * FROM "FinancialTracking" WHERE "userId" = $1', [userId]);
-        const financialTracking = result.rows;
+        const result = await pool.query(`
+          SELECT * FROM "FinancialTracking" 
+          WHERE "userId" = $1
+          ORDER BY date DESC, time DESC 
+      `, [userId]);
+      const financialTracking = result.rows;
         let totalAmount = 0;
         for (const entry of financialTracking) {
           totalAmount += entry.amount;

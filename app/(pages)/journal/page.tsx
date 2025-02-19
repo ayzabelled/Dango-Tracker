@@ -7,7 +7,6 @@ import { SessionProvider, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import LoadingSpinner from "@/components/loading-indicator";
 
-
 const TodoList: React.FC = () => {
   // Renamed for clarity
   const { data: session, status } = useSession();
@@ -32,13 +31,11 @@ const TodoList: React.FC = () => {
       window.location.reload();
     } catch (error) {
       console.error("Error updating received status:", error);
-
     }
   };
 
   useEffect(() => {
     if (status === "loading") return ;
-
 
     if (status === "unauthenticated" || !session) {
       redirect("/login");
@@ -65,6 +62,7 @@ const TodoList: React.FC = () => {
         }
 
         const result = await response.json();
+        console.log("todolist: ", result);
 
         setData(result.data as TodoListRequest[]);
 
@@ -88,7 +86,6 @@ const TodoList: React.FC = () => {
 
   if (status === "loading") {
     return <LoadingSpinner />;
-
   }
 
   if (status === "unauthenticated" || !session) {
@@ -102,7 +99,6 @@ const TodoList: React.FC = () => {
   return (
     <>
       {loading && <LoadingSpinner />}
-
 
       <div className="p-4">
         <h1 className="text-2xl font-bold text-white pt-2 pb-4">

@@ -49,6 +49,8 @@ export async function GET(request: Request) {
       FROM "TodoList" 
       INNER JOIN "Category" ON "TodoList".category::uuid = "Category".id
       WHERE "TodoList"."userId" = $1
+      ORDER BY "TodoList"."dueDate" DESC
+
 
     `, [userId]);
 
