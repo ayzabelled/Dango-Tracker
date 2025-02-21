@@ -27,6 +27,18 @@ interface DataTableProps<TData, TValue> {
   onCheckboxChange?: (id: string) => Promise<void>;
 }
 
+export type PaginationState = {
+  pageIndex: number;
+  pageSize: number;
+};
+
+export type PaginationTableState = {
+  pagination: PaginationState;
+};
+
+export type PaginationInitialTableState = {
+  pagination?: Partial<PaginationState>;
+};
 
 export function DataTable<TData extends { id: string; category?: string, done?: boolean}, TValue>({
   columns,
@@ -34,6 +46,10 @@ export function DataTable<TData extends { id: string; category?: string, done?: 
 }: DataTableProps<TData, TValue>) {
 
   const [sorting, setSorting] = React.useState<SortingState>([])
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 6, // Initial page size
+  });
   const table = useReactTable({
     data,
     columns,
@@ -42,8 +58,10 @@ export function DataTable<TData extends { id: string; category?: string, done?: 
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     state: {
-      sorting,
+      sorting, 
+      pagination,
     },
+    onPaginationChange: setPagination, 
   });
 
   return (

@@ -178,7 +178,7 @@ const NewEntryPage: React.FC = () => {
     <>
       {loading && <LoadingSpinner/>
       }
-      <div className="flex flex-col items-center p-4">
+      <div className="flex flex-col items-center p-4 h-screen">
         <h1 className="font-bold text-3xl pt-2 pb-2">➕ To-do List ➕</h1>
         <div className="border-2 border-[#6486DB] p-4 rounded-md shadow-md bg-[#F4F4F4] text-[#212121]"
         >
@@ -225,7 +225,7 @@ const NewEntryPage: React.FC = () => {
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="[&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden border-[#6486DB] border-2 rounded-3xl text-center font-bold"
+                className="bg-white [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden border-[#6486DB] border-2 rounded-3xl text-center font-bold"
                 required
               />
             </div>
@@ -246,7 +246,7 @@ const NewEntryPage: React.FC = () => {
                 id="category"
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="flex h-9 w-full rounded-md bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#6486DB] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden border-[#6486DB] border-2"
+                className="bg-white flex h-9 w-full rounded-md bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#6486DB] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden border-[#6486DB] border-2"
               >
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
@@ -256,7 +256,7 @@ const NewEntryPage: React.FC = () => {
               </select>
             </div>
 
-            <div>
+            <div className="flex items-center">
               <label htmlFor="date">Date:</label>
             </div>
             <div className="col-span-2">
@@ -266,7 +266,7 @@ const NewEntryPage: React.FC = () => {
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 required
-                className="border-[#6486DB] border-2 rounded-3xl"
+                className="border-[#6486DB] border-2 rounded-md bg-white"
               />
             </div>
 
@@ -321,7 +321,7 @@ const NewEntryPage: React.FC = () => {
                 value={newCategoryName}
                 onChange={(e) => setNewCategoryName(e.target.value)}
                 placeholder="New Category Name"
-                className="border-[#6486DB] border-2 rounded-3xl text-center"
+                className="border-[#6486DB] border-2 rounded-3xl text-center bg-white"
                 required
               />
             </div>
