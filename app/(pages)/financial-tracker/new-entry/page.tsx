@@ -158,7 +158,7 @@ const FinancialTrackingForm: React.FC = () => {
               id="amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="[&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden border-[#6486DB] border-2 rounded-3xl text-center font-bold"
+              className="bg-white [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden border-[#6486DB] border-2 rounded-3xl text-center font-bold"
               required
             />
           </div>
@@ -173,16 +173,16 @@ const FinancialTrackingForm: React.FC = () => {
           <div className="flex items-center">
             <label htmlFor="category">Category:</label>
           </div>
-          <div className="col-span-2">
+          <div className="col-span-2 w-full">
             <select
               id="category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="flex h-9 w-full bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#6486DB] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden border-[#6486DB] border-2 rounded-3xl"
+              className="bg-white flex h-9 w-[12rem] overflow-ellipsis rounded-md bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#6486DB] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden border-[#6486DB] border-2 "
             >
               {type === "Cash In"
                 ? cashInCategories.map((cat) => (
-                    <option key={cat} value={cat}>
+                    <option key={cat} value={cat} >
                       {cat}
                     </option>
                   ))
@@ -194,7 +194,7 @@ const FinancialTrackingForm: React.FC = () => {
             </select>
           </div>
 
-          <div>
+          <div className="flex items-center">
             <label htmlFor="date">Date:</label>
           </div>
           <div className="col-span-2">
@@ -202,11 +202,12 @@ const FinancialTrackingForm: React.FC = () => {
               type="date"
               id="date"
               value={date}
+              className="border-2 bg-white"
               onChange={(e) => setDate(e.target.value)}
               required
             />
           </div>
-          <div>
+          <div className="flex items-center">
             <label htmlFor="time">Time:</label>
           </div>
           <div className="col-span-2">
@@ -214,6 +215,7 @@ const FinancialTrackingForm: React.FC = () => {
               type="time"
               id="time"
               value={time}
+              className="border-2 bg-white"
               onChange={(e) => setTime(e.target.value)}
               required
             />

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { DataTable } from "@/components/data-table";
-import { todolistColumn, TodoListRequest } from "@/components/columns";
+import { Journal, journalColumn } from "@/components/columns";
 import { SessionProvider, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import LoadingSpinner from "@/components/loading-indicator";
@@ -10,7 +10,7 @@ import LoadingSpinner from "@/components/loading-indicator";
 const TodoList: React.FC = () => {
   // Renamed for clarity
   const { data: session, status } = useSession();
-  const [data, setData] = useState<TodoListRequest[] | null>(null);
+  const [data, setData] = useState<Journal[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -51,7 +51,7 @@ const TodoList: React.FC = () => {
         }
 
         const response = await fetch(
-          `/api/to-do-list?userId=${session.user.id}`
+          `/api/journal?userId=${session.user.id}`
         );
 
         if (!response.ok) {
@@ -64,13 +64,13 @@ const TodoList: React.FC = () => {
         const result = await response.json();
         console.log("todolist: ", result);
 
-        setData(result.data as TodoListRequest[]);
+        setData(result.data as Journal[]);
 
         if (!result.data || !Array.isArray(result.data)) {
           throw new Error("Invalid data format received from the API.");
         }
 
-        setData(result.data as TodoListRequest[]);
+        setData(result.data as Journal[]);
       } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : "An unknown error occurred";
@@ -102,13 +102,13 @@ const TodoList: React.FC = () => {
 
       <div className="p-4">
         <h1 className="text-2xl font-bold text-white pt-2 pb-4">
-          📜 To-do List
+        ✍️ Journal
         </h1>{" "}
         {/* Updated title */}
         <div>
           {data && (
             <DataTable
-              columns={todolistColumn}
+              columns={journalColumn}
               data={data}
               onCheckboxChange={handleCheckboxChange}
             />

@@ -1,3 +1,4 @@
+"use client"
 import { ChevronDown } from "lucide-react";
 
 import {
@@ -10,6 +11,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { signOut } from "next-auth/react";
+
 
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./ui/collapsible";
 
@@ -20,13 +23,6 @@ const items = [
   {
     title: "📊 Dashboard",
     url: "/",
-  },
-];
-
-const logout = [
-  {
-    title: "🚪 Logout",
-    url: "/login",
   },
 ];
 
@@ -122,15 +118,14 @@ export function AppSidebar() {
         ))}
 
         <SidebarMenu>
-          {logout.map((item) => (
-            <SidebarMenuItem key={item.title}>
+            <SidebarMenuItem key="logout">
               <SidebarMenuButton asChild>
-                <a href={item.url}>
-                  <span>{item.title}</span>
-                </a>
+              <button onClick={() => signOut()}>
+              <span>🚪 Logout</span>
+            </button>
+
               </SidebarMenuButton>
             </SidebarMenuItem>
-          ))}
         </SidebarMenu>
       </SidebarContent>
     </Sidebar>
