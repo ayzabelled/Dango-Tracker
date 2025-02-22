@@ -117,6 +117,7 @@ const NewEntryPage: React.FC = () => {
               <Input
                 type="text"
                 id="title"
+                placeholder="Journal Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="[&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden border-[#6486DB] border-2 rounded-md text-center bg-white"
@@ -135,7 +136,7 @@ const NewEntryPage: React.FC = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={10}
-              className="w-full max-h-[20rem] overflow-auto [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden border-[#6486DB] border-2 rounded-md px-3 py-1 text-start text-sm"
+              className="w-full min-h-[10rem] max-h-[20rem] overflow-auto [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden border-[#6486DB] border-2 rounded-md px-3 py-1 text-start text-sm"
               />
             </div>
 

@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import {
   FinancialTracker,
+  Journal,
+  journalColumn,
   todolistColumn,
   TodoListRequest,
   trackerColumns,
@@ -18,6 +20,7 @@ const Dashboard: React.FC = () => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [data, setData] = useState<FinancialTracker[] | null>(null);
   const [todoData, setTodoData] = useState<TodoListRequest[] | null>(null);
+  const [journalData, setJournalData] = useState<Journal[] | null>(null);
 
   useEffect(() => {
     if (status === "loading") return;
@@ -66,9 +69,27 @@ const Dashboard: React.FC = () => {
 
         setTodoData(todoResult.data as TodoListRequest[]);
 
-        if (!result.data || !Array.isArray(result.data)) {
+      const journalResult = await fetch(
+          `/api/journal?userId=${session.user.id}`
+        );
+
+        if (!journalResult.ok) {
+          const errorData = await journalResult.json();
+          throw new Error(
+            errorData.error || `HTTP error! status: ${journalResult.status}`
+          );
+        }
+
+        const journalResponse = await journalResult.json();
+        console.log("journal: ", journalResponse);
+
+        setJournalData(journalResponse.data as Journal[]);
+
+        if (!journalResponse.data || !Array.isArray(journalResponse.data)) {
           throw new Error("Invalid data format received from the API.");
         }
+
+        setJournalData(journalResponse.data as Journal[]);
 
         setTodoData(todoResult.data as TodoListRequest[]);
 
@@ -159,7 +180,23 @@ const Dashboard: React.FC = () => {
             />
           )}
         </div>
+        <div>
+          <h1 className="text-xl font-bold text-white pt-4 pb-2">
+            {" "}
+            Journal Entries
+          </h1>
+        </div>
+        <div>
+          {journalData && (
+            <DahboardTable
+              columns={journalColumn}
+              data={journalData}
+              onCheckboxChange={handleCheckboxChange}
+            />
+          )}
+        </div>
       </div>
+      
     </>
   );
 };
