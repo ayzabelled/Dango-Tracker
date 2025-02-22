@@ -77,4 +77,4 @@ Contributions are always welcome! Feel free to submit pull requests or open issu
 
 ## License 📄
 
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](LICENSE).
