@@ -137,7 +137,6 @@ const NewEntryPage: React.FC = () => {
       setNewCategoryName("");
       setSelectedCategory(newCategory.data.id);
       setSuccessMessage("Category created successfully!");
-      setFormType("entry"); // Switch back to entry form after creating category
     } catch (err: any) {
       setError(err.message);
       console.error("Error creating category:", err);
