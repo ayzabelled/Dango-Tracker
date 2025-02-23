@@ -128,6 +128,28 @@ export function AppSidebar() {
             </SidebarMenuItem>
         </SidebarMenu>
       </SidebarContent>
+      <footer className="text-sm text-muted-foreground p-4">
+        Designed and Developed by{" "}
+        <a
+          href="https://www.linkedin.com/in/allana-yzabelle-diaz-346787236/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-4"
+        >
+          Allana Yzabelle Diaz
+        </a>
+        <br />
+        Icons by{" "}
+        <a
+          href="https://icons8.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-4"
+        >
+          Icons8
+        </a>
+      </footer>
     </Sidebar>
+    
   );
 }

@@ -98,6 +98,27 @@ const LoginForm: React.FC = () => {
           </div>
         </CardContent>
       </Card>
+      <footer className="text-center text-sm text-muted-foreground">
+        Designed and Developed by{" "}
+        <a
+          href="https://www.linkedin.com/in/allana-yzabelle-diaz-346787236/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-4"
+        >
+          Allana Yzabelle Diaz
+        </a>
+        <br />
+        Icons by{" "}
+        <a
+          href="https://icons8.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-4"
+        >
+          Icons8
+        </a>
+      </footer>
     </div>
   )
 }
