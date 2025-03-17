@@ -118,7 +118,7 @@ export function DataTable<TData extends { id: string; category?: string, done?: 
     </div>
     <div className="flex items-center justify-end space-x-2 py-4">
         <Button
-          className="bg-[#6486DB] text-white"
+          className="bg-[#6486DB] text-white border-2 border-[#6486DB] hover:bg-[#f4f4f4] hover:text-[#6486DB]"
           size="sm"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
@@ -126,7 +126,7 @@ export function DataTable<TData extends { id: string; category?: string, done?: 
           Previous
         </Button>
         <Button
-          className="bg-[#6486DB] text-white"
+          className="bg-[#6486DB] text-white border-2 border-[#6486DB] hover:bg-[#f4f4f4] hover:text-[#6486DB]"
           size="sm"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}

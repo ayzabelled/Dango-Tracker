@@ -11,6 +11,7 @@ import LoadingSpinner from "@/components/loading-indicator";
 
 const FinancialTrackingForm: React.FC = () => {
   const { data: session, status } = useSession();
+  const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
   const [type, setType] = useState("Cash In");
@@ -27,18 +28,23 @@ const FinancialTrackingForm: React.FC = () => {
     "🎁 Allowance",
     "📈 Investment",
     "💝 Gifts",
+    "🧾 Debt Collection",
     "➕ Others",
   ];
 
   const cashOutCategories = [
     "🏠 Housing",
     "💡 Utilities",
+    "💰 Bills",
     "🍎 Food",
     "🚌 Transportation",
+    "😽 Pets",
     "📚 Education",
+    "💊 Medicine",
     "🩺 Healthcare",
     "🧴 Personal Care",
     "🛍️ Shopping",
+    "🔔 Subscriptions",
     "🎬 Entertainment",
     "👨‍👩‍👧‍👦 Family & Friends",
     "💳 Debt Payments",
@@ -76,6 +82,7 @@ const FinancialTrackingForm: React.FC = () => {
       const requestBody = {
         userId: session.user.id,
         amount: amountValue,
+        title,
         category,
         type,
         date,
@@ -92,6 +99,7 @@ const FinancialTrackingForm: React.FC = () => {
         body: JSON.stringify({
           userId: session.user.id,
           amount: amountValue,
+          title,
           category,
           type,
           date,
@@ -105,7 +113,7 @@ const FinancialTrackingForm: React.FC = () => {
       }
 
       console.log("Response data:", await response.json());
-
+      setTitle("");
       setAmount("");
       setCategory("");
       setDate("");
@@ -170,6 +178,21 @@ const FinancialTrackingForm: React.FC = () => {
               Amount
             </label>
           </div>
+
+          <div className="flex items-center">
+            <label htmlFor="title">Title:</label>
+          </div>
+          <div className="col-span-2 w-full">
+            <Input
+              type="string"
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="bg-white [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden border-[#6486DB] border-2 rounded-md text-center"
+              required
+            />
+          </div>
+
           <div className="flex items-center">
             <label htmlFor="category">Category:</label>
           </div>
@@ -178,11 +201,11 @@ const FinancialTrackingForm: React.FC = () => {
               id="category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="bg-white flex h-9 w-[12rem] overflow-ellipsis rounded-md bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#6486DB] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden border-[#6486DB] border-2 "
+              className="bg-white flex h-9 w-full overflow-ellipsis rounded-md bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#6486DB] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm [&::-webkit-inner-spin-button]:hidden [&::-webkit-outer-spin-button]:hidden border-[#6486DB] border-2 "
             >
               {type === "Cash In"
                 ? cashInCategories.map((cat) => (
-                    <option key={cat} value={cat} >
+                    <option key={cat} value={cat}>
                       {cat}
                     </option>
                   ))
