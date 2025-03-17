@@ -19,7 +19,8 @@ import Link from "next/link";
 export type FinancialTracker = {
   userid: string;
   id: string;
-  amount: string;
+  title: string;
+  amount: number;
   category: string;
   type: string;
   date: Date;
@@ -55,6 +56,26 @@ export const trackerColumns: ColumnDef<FinancialTracker>[] = [
       }
 
       return <div className={className}>{type}</div>;
+    },
+  },
+  {
+    accessorKey: "title",
+    header: ({ column }) => {
+      return (
+        <div className="flex justify-center">
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Title
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
+      );
+    },
+    cell: ({ row }) => {
+      const title: string = row.getValue("title");
+      return <div className="flex text-justify justify-center">{title}</div>;
     },
   },
   {

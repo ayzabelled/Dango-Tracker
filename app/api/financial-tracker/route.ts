@@ -5,6 +5,7 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 interface FinancialTrackingRequest {
   userId: string; // Ensure userId is provided
+  title: string;
   amount: number;
   category: string;
   type: string;
@@ -14,9 +15,9 @@ interface FinancialTrackingRequest {
 
 export async function POST(request: Request) {
   try {
-    const { userId, amount, category, type, date, time } = await request.json() as FinancialTrackingRequest;
+    const { userId, amount, category, type, date, time, title } = await request.json() as FinancialTrackingRequest;
 
-    if (!userId || !amount || !category || !type || !date || !time) {
+    if (!userId || !amount || !category || !type || !date || !time || !title) {
       return new Response(JSON.stringify({ error: 'All fields are required' }), { status: 400 });
     }
 
@@ -24,8 +25,8 @@ export async function POST(request: Request) {
     const dateTimestamp = `${date} 00:00:00`;
     const timeTimestamp = `1970-01-01 ${time}:00`;
     const result = await pool.query(
-      'INSERT INTO "FinancialTracking" (id, "userId", amount, category, type, date, time) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-      [id, userId, amount, category, type, dateTimestamp, timeTimestamp]
+      'INSERT INTO "FinancialTracking" (id, "userId", amount, category, type, date, time, title) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+      [id, userId, amount, category, type, dateTimestamp, timeTimestamp, title]
 
     );
 

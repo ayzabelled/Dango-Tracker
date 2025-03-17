@@ -12,6 +12,8 @@ import {
 } from "@/components/columns"; // Import your type
 import { DahboardTable } from "@/components/dashboard-tables";
 import LoadingSpinner from "@/components/loading-indicator";
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+
 
 const Dashboard: React.FC = () => {
   const { data: session, status } = useSession();
@@ -21,7 +23,12 @@ const Dashboard: React.FC = () => {
   const [data, setData] = useState<FinancialTracker[] | null>(null);
   const [todoData, setTodoData] = useState<TodoListRequest[] | null>(null);
   const [journalData, setJournalData] = useState<Journal[] | null>(null);
+  const [isHidden, setIsHidden] = useState(true);
 
+  const toggleVisibility = () => {
+    setIsHidden(!isHidden);
+  };
+  
   useEffect(() => {
     if (status === "loading") return;
 
@@ -69,7 +76,7 @@ const Dashboard: React.FC = () => {
 
         setTodoData(todoResult.data as TodoListRequest[]);
 
-      const journalResult = await fetch(
+        const journalResult = await fetch(
           `/api/journal?userId=${session.user.id}`
         );
 
@@ -150,12 +157,24 @@ const Dashboard: React.FC = () => {
         <span className="text-xl font-bold"> 🍡 {session?.user?.name} 🍡</span>
 
         <div>
-          <h1 className="text-2xl font-bold text-white pt-2 pb-2">
-            Dashboard
-          </h1>{" "}
+          <h1 className="text-2xl font-bold text-white pt-2 pb-2">Dashboard</h1>{" "}
           {/* Updated title */}
           <div className="bg-[#f4f4f4] rounded-xl shadow-md flex justify-center text-[#212121] text-xl font-bold h-9">
-            <p className="flex items-center">₱{totalAmount}</p>
+            <p className="flex items-center">
+              {" "}
+              {isHidden ? "₱******" : `₱${totalAmount}`}
+            </p>
+            <button
+              onClick={toggleVisibility}
+              className="pl-4 text-[#6486DB] hover:text-[#2d4071]"
+              aria-label={isHidden ? "Show Amount" : "Hide Amount"}
+            >
+              {isHidden ? (
+                <EyeIcon className="h-5 w-5" />
+              ) : (
+                <EyeSlashIcon className="h-5 w-5" />
+              )}
+            </button>
           </div>
           <p className="flex justify-center pt-1 italic text-xs">Balance</p>
           <h1 className="text-xl font-bold text-white pt-2 pb-2">
@@ -196,7 +215,6 @@ const Dashboard: React.FC = () => {
           )}
         </div>
       </div>
-      
     </>
   );
 };
